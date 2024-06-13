@@ -13,21 +13,38 @@ class C2Server:
         # Configure the style of the UI
         self.style = {"bg": "black", "fg": "green", "font": ("Courier", 12), "insertbackground": "green"}
 
-        self.log_area = scrolledtext.ScrolledText(master, wrap=tk.WORD, width=50, height=20, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"], insertbackground=self.style["insertbackground"])
-        self.log_area.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+        # Log area
+        self.log_area = scrolledtext.ScrolledText(master, wrap=tk.WORD, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"], insertbackground=self.style["insertbackground"])
+        self.log_area.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
         
+        # Command label
         self.command_label = tk.Label(master, text="Command:", bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"])
         self.command_label.grid(row=1, column=0, padx=10, pady=5, sticky=tk.W)
         
-        self.command_entry = tk.Entry(master, width=40, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"], insertbackground=self.style["insertbackground"])
-        self.command_entry.grid(row=1, column=1, padx=10, pady=5, sticky=tk.W)
+        # Command entry
+        self.command_entry = tk.Entry(master, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"], insertbackground=self.style["insertbackground"])
+        self.command_entry.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
         
-        self.send_button = tk.Button(master, text="Send Command", command=self.send_command, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"])
-        self.send_button.grid(row=2, column=0, pady=10)
-        
-        self.quit_button = tk.Button(master, text="Quit Server", command=self.quit_server, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"])
-        self.quit_button.grid(row=2, column=1, pady=10)
+        # Button frame
+        self.button_frame = tk.Frame(master, bg=self.style["bg"])
+        self.button_frame.grid(row=2, column=0, columnspan=2, pady=10, sticky="ew")
 
+        # Send button
+        self.send_button = tk.Button(self.button_frame, text="Send Command", command=self.send_command, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"])
+        self.send_button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+        
+        # Quit button
+        self.quit_button = tk.Button(self.button_frame, text="Quit Server", command=self.quit_server, bg=self.style["bg"], fg=self.style["fg"], font=self.style["font"])
+        self.quit_button.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+
+        # Configure grid layout
+        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_rowconfigure(1, weight=0)
+        self.master.grid_rowconfigure(2, weight=0)
+        self.master.grid_columnconfigure(0, weight=1)
+        self.master.grid_columnconfigure(1, weight=1)
+
+        # Network setup
         self.host = '0.0.0.0'
         self.port = 4444
         self.clients = []
@@ -104,7 +121,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = C2Server(root)
     root.mainloop()
-
-
 
 
