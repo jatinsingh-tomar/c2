@@ -1,0 +1,22 @@
+Step 1: Create a Certificate Authority (CA)
+Generate the CA's private key:
+bash
+Copy code
+openssl genpkey -algorithm RSA -out ca-key.pem -aes256
+Generate the CA's certificate:
+bash
+Copy code
+openssl req -x509 -new -nodes -key ca-key.pem -sha256 -days 3650 -out ca-cert.pem
+Step 2: Generate a Server Certificate Signed by the CA
+Generate the server's private key:
+bash
+Copy code
+openssl genpkey -algorithm RSA -out server-key.pem
+Generate a certificate signing request (CSR) for the server:
+bash
+Copy code
+openssl req -new -key server-key.pem -out server.csr
+Generate the server's certificate signed by the CA:
+bash
+Copy code
+openssl x509 -req -in server.csr -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -days 365 -sha256

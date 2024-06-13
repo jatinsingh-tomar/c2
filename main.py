@@ -67,7 +67,9 @@ class C2Server:
                 
                 # Wrap the socket with SSL for encryption
                 context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-                context.load_cert_chain(certfile="server.crt", keyfile="server.key")
+                context.load_cert_chain(certfile="server-cert.pem", keyfile="server-key.pem")
+                context.load_verify_locations(cafile="ca-cert.pem")
+                context.verify_mode = ssl.CERT_REQUIRED
                 secure_socket = context.wrap_socket(client_socket, server_side=True)
                 
                 self.clients.append(secure_socket)
@@ -121,5 +123,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = C2Server(root)
     root.mainloop()
-
-
